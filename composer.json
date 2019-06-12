@@ -1,0 +1,32 @@
+{
+  "name": "kingsquare/communibase-databag",
+  "description": "Communibase dataBag",
+  "keywords": [
+    "communibase",
+    "dataBag"
+  ],
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Misha van Tol",
+      "email": "mishavantol@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Communibase\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Communibase\\Tests\\": "test/"
+    }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^5"
+  }
+}
