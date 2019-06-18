@@ -47,12 +47,21 @@ final class GetFromDataBagTest extends TestCase
         unset($this->dataBag);
     }
 
+    public function invalidPahtProvider()
+    {
+        return [
+          'non-existant' => ['invalidPath'],
+          'ends-with-.' => ['person.'],
+        ];
+    }
+
     /**
+     * @dataProvider invalidPahtProvider
      * @expectedException \Communibase\InvalidDataBagPathException
      */
-    public function testInvalidPath()
+    public function testInvalidPath($path)
     {
-        $this->dataBag->get('invalidPath');
+        $this->dataBag->get($path);
     }
 
     /**
@@ -66,6 +75,8 @@ final class GetFromDataBagTest extends TestCase
             ['person.emailAddresses.0', ['emailAddress' => 'john@doe.com', 'type' => 'private']],
             ['person.emailAddresses.0.emailAddress', 'john@doe.com'],
             ['person.emailAddresses.privateGsm.emailAddress', 'john@doe2.com'],
+            ['person.addresses.test', 'default'],
+            ['person.emailAddresses.test', 'default'],
         ];
     }
 

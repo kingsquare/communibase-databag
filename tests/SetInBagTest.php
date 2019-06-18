@@ -44,6 +44,15 @@ class SetInBagTest extends TestCase
     }
 
     /**
+     *
+     */
+    public function testRemoveBySettingNull()
+    {
+        $this->filledDataBag->set('foo.a', null);
+        $this->assertNull($this->filledDataBag->getState('foo')['a']);
+    }
+
+    /**
      * @expectedException \Communibase\InvalidDataBagPathException
      */
     public function testInvalidPath()
