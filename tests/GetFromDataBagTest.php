@@ -17,9 +17,6 @@ final class GetFromDataBagTest extends TestCase
      */
     private $dataBag;
 
-    /**
-     *
-     */
     protected function setUp()
     {
         $personData = [
@@ -39,9 +36,6 @@ final class GetFromDataBagTest extends TestCase
         $this->dataBag->addEntityData('person', $personData);
     }
 
-    /**
-     *
-     */
     protected function tearDown()
     {
         unset($this->dataBag);
