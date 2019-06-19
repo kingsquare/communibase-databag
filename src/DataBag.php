@@ -112,47 +112,44 @@ final class DataBag
             return $default;
         }
 
-        return $this->getIndexed($entityType, $path, $index, $default);
+        return $this->getIndexed((array)$this->data[$entityType][$path], $index, $default);
     }
 
     /**
-     * @param string $entityType
-     * @param string $path
+     * @param array $nodes
      * @param string $index
      * @param mixed $default
      *
      * @return mixed
      */
-    private function getIndexed($entityType, $path, $index, $default)
+    private function getIndexed(array $nodes, $index, $default)
     {
-        // Indexed with 'type' property
         $field = null;
         if (strpos($index, '.') > 0) {
             list($index, $field) = explode('.', $index, 2);
         }
 
-        $nodes = $this->data[$entityType][$path];
+        $translatedIndex = $index;
 
         if (!is_numeric($index)) {
-            $target = $index;
-            $index = null;
-            foreach ((array)$nodes as $nodeIndex => $node) {
-                if ($node['type'] === $target) {
-                    $index = $nodeIndex;
+            $translatedIndex = null;
+            foreach ($nodes as $nodeIndex => $node) {
+                if ($node['type'] === $index) {
+                    $translatedIndex = $nodeIndex;
                     break;
                 }
             }
         }
 
-        if ($index === null) {
+        if ($translatedIndex === null) {
             return $default;
         }
 
         if ($field === null) {
-            return isset($nodes[$index]) ? $nodes[$index] : $default;
+            return isset($nodes[$translatedIndex]) ? $nodes[$translatedIndex] : $default;
         }
 
-        return isset($nodes[$index][$field]) ? $nodes[$index][$field] : $default;
+        return isset($nodes[$translatedIndex][$field]) ? $nodes[$translatedIndex][$field] : $default;
     }
 
     /**
