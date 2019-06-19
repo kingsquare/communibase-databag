@@ -44,7 +44,7 @@ final class GetFromDataBagTest extends TestCase
     /**
      * @return array
      */
-    public function invalidPahtProvider()
+    public function invalidPathProvider()
     {
         return [
             'empty' => [''],
@@ -64,7 +64,7 @@ final class GetFromDataBagTest extends TestCase
     }
 
     /**
-     * @dataProvider invalidPahtProvider
+     * @dataProvider invalidPathProvider
      * @expectedException \Communibase\InvalidDataBagPathException
      */
     public function testInvalidPath($path)
