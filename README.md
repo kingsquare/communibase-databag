@@ -1,5 +1,6 @@
 # Communibase DataBag
 
+[![Build Status](https://travis-ci.org/kingsquare/communibase-databag.svg?branch=master)](https://travis-ci.org/kingsquare/communibase-databag)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/kingsquare/communibase-databag/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/kingsquare/communibase-databag/?branch=master)
 
 It's a bag, for CB data. If we need to create a CB object from CB data (array) we can use this dataBag object as
