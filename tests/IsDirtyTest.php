@@ -30,7 +30,7 @@ class IsDirtyTest extends TestCase
         $dataBag = DataBag::create();
         $dataBag->addEntityData('person', $personData);
         $dataBag->set('person.firstName', 'Darko');
-        $this->assertTrue($dataBag->isDirty('person'));
+        $this->assertSame(true, $dataBag->isDirty('person'));
     }
 
     public function testIsDirtyWhenFieldIsUnchanged()
@@ -51,7 +51,7 @@ class IsDirtyTest extends TestCase
         $dataBag = DataBag::create();
         $dataBag->addEntityData('person', $personData);
         $dataBag->set('person.firstName', 'John');
-        $this->assertFalse($dataBag->isDirty('person'));
+        $this->assertSame(false, $dataBag->isDirty('person'));
     }
 
     public function testIsDirtyWhenRemovedFromBag()
@@ -72,7 +72,7 @@ class IsDirtyTest extends TestCase
         $dataBag = DataBag::create();
         $dataBag->addEntityData('person', $personData);
         $dataBag->remove('person.firstName', true);
-        $this->assertTrue($dataBag->isDirty('person'));
+        $this->assertSame(true, $dataBag->isDirty('person'));
     }
 
     public function testIsDirtyWithUnknownPath()
@@ -112,6 +112,6 @@ class IsDirtyTest extends TestCase
         $dataBag = DataBag::create();
         $dataBag->addEntityData('person', $personData);
         $dataBag->set('company.title', 'Kingsquare BV');
-        $this->assertTrue($dataBag->isDirty('company'));
+        $this->assertSame(true, $dataBag->isDirty('company'));
     }
 }
