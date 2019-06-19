@@ -16,8 +16,8 @@ class GuardAgainstInvalidPathTest extends TestCase
 
     /**
      * @dataProvider pathProvider
-     * @param $path
-     * @param $expectException
+     * @param mixed $path
+     * @param bool $expectException
      * @throws \ReflectionException
      */
     public function testGuard($path, $expectException = true)
@@ -36,6 +36,13 @@ class GuardAgainstInvalidPathTest extends TestCase
     {
         return [
             'perfectly fine' => ['person.firstName', false],
+            'empty path.' => [''],
+            'not a string (int)' => [1],
+            'not a string (array)' => [[]],
+            'not a string (null)' => [null],
+            'not a string (bool)' => [true],
+            'not a string (float)' => [1.1001],
+            'not a string (object)' => [new \stdClass],
             'starting with .' => ['.person.firstName'],
             'ends with .' => ['person.firstName.'],
             'has ..' => ['person..firstName'],

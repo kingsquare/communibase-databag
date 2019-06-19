@@ -361,8 +361,13 @@ final class DataBag
      */
     private function guardAgainstInvalidPath($path)
     {
-        if (strpos($path, '..') !== false // has .. somewhere
-            || substr_compare($path, '.', -1) === 0 // ends with .
+        if (!is_string($path)) {
+            throw new InvalidDataBagPathException('Invalid path provided: path must be a string ' . gettype($path).' given');
+        }
+
+        if ($path === '' // empty
+            || strpos($path, '..') !== false // has .. somewhere
+            || substr($path, -1) === '.' // ends with .
             || in_array(strpos($path, '.'), [false, 0], true) // starts with or doesnt have any .
         ) {
             throw new InvalidDataBagPathException('Invalid path provided: ' . $path);
