@@ -112,6 +112,19 @@ final class DataBag
             return $default;
         }
 
+        return $this->getIndexed($entityType, $path, $index, $default);
+    }
+
+    /**
+     * @param string $entityType
+     * @param string $path
+     * @param string $index
+     * @param mixed $default
+     *
+     * @return mixed
+     */
+    private function getIndexed($entityType, $path, $index, $default)
+    {
         // Indexed with 'type' property
         $field = null;
         if (strpos($index, '.') > 0) {
@@ -130,6 +143,7 @@ final class DataBag
                 }
             }
         }
+
         if ($index === null) {
             return $default;
         }
@@ -137,6 +151,7 @@ final class DataBag
         if ($field === null) {
             return isset($nodes[$index]) ? $nodes[$index] : $default;
         }
+
         return isset($nodes[$index][$field]) ? $nodes[$index][$field] : $default;
     }
 
@@ -204,6 +219,16 @@ final class DataBag
         }
 
         // Indexed
+        $this->setIndexed($entityType, $path, $value);
+    }
+
+    /**
+     * @param string $entityType
+     * @param string $path
+     * @param mixed $value
+     */
+    private function setIndexed($entityType, $path, $value)
+    {
         list($path, $index) = explode('.', $path, 2);
 
         $field = null;
@@ -229,17 +254,7 @@ final class DataBag
 
         // No index found, new entry
         if ($index === null) {
-            if ($field === null) {
-                $this->data[$entityType][$path][] = $value;
-                return;
-            }
-            $value = [
-                $field => $value
-            ];
-            if (!is_numeric($target)) {
-                $value['type'] = $target;
-            }
-            $this->data[$entityType][$path][] = $value;
+            $this->addNewEntry($entityType, $path, $field, $target, $value);
             return;
         }
 
@@ -249,6 +264,28 @@ final class DataBag
             return;
         }
         $this->data[$entityType][$path][$index][$field] = $value;
+    }
+
+    /**
+     * @param string $entityType
+     * @param string $path
+     * @param string $field
+     * @param string $target
+     * @param mixed $value
+     */
+    private function addNewEntry($entityType, $path, $field, $target, $value)
+    {
+        if ($field === null) {
+            $this->data[$entityType][$path][] = $value;
+            return;
+        }
+        $value = [
+            $field => $value
+        ];
+        if (!is_numeric($target)) {
+            $value['type'] = $target;
+        }
+        $this->data[$entityType][$path][] = $value;
     }
 
     /**
