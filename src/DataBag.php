@@ -269,7 +269,7 @@ final class DataBag
     /**
      * @param string $entityType
      * @param string $path
-     * @param string $field
+     * @param string|null $field
      * @param string $target
      * @param mixed $value
      */
