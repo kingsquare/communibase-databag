@@ -1,6 +1,13 @@
-# Change Log
+# Change Log    
 
-## 1.0.0 - 2019-06-12
+## 1.1.1
+* code styling + reduced complexity
 
-### Added
-- initial version
+
+## 1.1.0
+* added some badges
+* added more tests
+* code styling
+
+## 1.0.0 
+* initial release
