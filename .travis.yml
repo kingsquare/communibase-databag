@@ -3,7 +3,6 @@ language: php
 sudo: false
 
 php:
-  - 5.6
   - 7.1
   - 7.2
   - 7.3
@@ -20,3 +19,4 @@ install:
 
 script:
     - vendor/bin/phpstan.phar analyse -l max --no-interaction --no-progress src/ tests/
+    - vendor/bin/phpunit
