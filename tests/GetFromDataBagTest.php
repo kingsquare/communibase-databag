@@ -47,11 +47,19 @@ final class GetFromDataBagTest extends TestCase
         unset($this->dataBag);
     }
 
+    /**
+     * @return array
+     */
     public function invalidPahtProvider()
     {
         return [
-          'non-existant' => ['invalidPath'],
-          'ends-with-.' => ['person.'],
+            'empty' => [''],
+            'non-existant' => ['invalidPath'],
+            'ends-with-.' => ['person.'],
+            'starting with .' => ['.person.firstName'],
+            'ends with .' => ['person.firstName.'],
+            'has ..' => ['person..firstName'],
+            'has .. and .' => ['person..firstName.'],
         ];
     }
 
