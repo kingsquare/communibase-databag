@@ -49,9 +49,15 @@ final class GetFromDataBagTest extends TestCase
         return [
             'empty' => [''],
             'non-existant' => ['invalidPath'],
-            'ends-with-.' => ['person.'],
+            'ends with .' => ['person.'],
+            'ends with . on subpath' => ['person.firstName.'],
+            'not a string (int)' => [1],
+            'not a string (array)' => [[]],
+            'not a string (null)' => [null],
+            'not a string (bool)' => [true],
+            'not a string (float)' => [1.1001],
+            'not a string (object)' => [new \stdClass],
             'starting with .' => ['.person.firstName'],
-            'ends with .' => ['person.firstName.'],
             'has ..' => ['person..firstName'],
             'has .. and .' => ['person..firstName.'],
         ];

@@ -98,8 +98,6 @@ final class DataBag
      */
     private function getByPath($path, $default = null)
     {
-        $this->guardAgainstInvalidPath($path);
-
         list($entityType, $path) = explode('.', $path, 2);
 
         // Direct property
@@ -159,6 +157,8 @@ final class DataBag
      */
     public function get($path, $default = null)
     {
+        $this->guardAgainstInvalidPath($path);
+
         if (!array_key_exists($path, $this->cache)) {
             $this->cache[$path] = $this->getByPath($path, $default);
         }
