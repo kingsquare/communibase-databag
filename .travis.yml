@@ -17,3 +17,6 @@ cache:
 
 install:
     - travis_retry composer install --no-interaction --prefer-dist
+
+script:
+    - vendor/bin/phpstan.phar analyse -l max --no-interaction --no-progress src/ tests/
