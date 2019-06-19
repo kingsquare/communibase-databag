@@ -157,6 +157,7 @@ final class DataBag
      */
     public function get($path, $default = null)
     {
+        $path = (string)$path;
         $this->guardAgainstInvalidPath($path);
 
         if (!array_key_exists($path, $this->cache)) {
@@ -175,6 +176,7 @@ final class DataBag
      */
     public function set($path, $value)
     {
+        $path = (string)$path;
         $this->guardAgainstInvalidPath($path);
 
         unset($this->cache[$path]);
@@ -261,6 +263,7 @@ final class DataBag
      */
     public function remove($path, $removeAll = true)
     {
+        $path = (string)$path;
         $this->guardAgainstInvalidPath($path);
 
         list($entityType, $path) = explode('.', $path, 2);
@@ -361,10 +364,6 @@ final class DataBag
      */
     private function guardAgainstInvalidPath($path)
     {
-        if (!is_string($path)) {
-            throw new InvalidDataBagPathException('Invalid path provided: path must be a string ' . gettype($path).' given');
-        }
-
         if ($path === '' // empty
             || strpos($path, '..') !== false // has .. somewhere
             || substr($path, -1) === '.' // ends with .
