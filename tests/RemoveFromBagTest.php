@@ -17,21 +17,14 @@ class RemoveFromBagTest extends TestCase
      */
     private $dataBag;
 
-    /**
-     *
-     */
+    private static $data = ['a' => 1, 'b' => [['type' => 'f', 'c' => 2], ['type' => 's', 'c' => 3], ['type' => 't']]];
+
     protected function setUp()
     {
         $this->dataBag = DataBag::create();
-        $this->dataBag->addEntityData(
-            'foo',
-            ['a' => 1, 'b' => [['type' => 'f', 'c' => 2], ['type' => 's', 'c' => 3]]]
-        );
+        $this->dataBag->addEntityData('foo', self::$data);
     }
 
-    /**
-     *
-     */
     protected function tearDown()
     {
         unset($this->dataBag);
@@ -51,30 +44,17 @@ class RemoveFromBagTest extends TestCase
     public function provider()
     {
         return [
-            [
-                'baz.bar',
-                ['foo' => ['a' => 1, 'b' => [['type' => 'f', 'c' => 2], ['type' => 's', 'c' => 3]]]]
-            ],
+            ['baz.bar', ['foo' => self::$data]],
+            ['baz.bar.0', ['foo' => self::$data]],
             [
                 'foo.a',
-                ['foo' => ['a' => null, 'b' => [['type' => 'f', 'c' => 2], ['type' => 's', 'c' => 3]]]]
+                ['foo' => ['a' => null, 'b' => [['type' => 'f', 'c' => 2], ['type' => 's', 'c' => 3], ['type' => 't']]]]
             ],
-            [
-                'foo.b.0',
-                ['foo' => ['a' => 1, 'b' => null]]
-            ],
-            [
-                'foo.b.s',
-                ['foo' => ['a' => 1, 'b' => [['type' => 'f', 'c' => 2]]]]
-            ],
-            [
-                'foo.b.0.c',
-                ['foo' => ['a' => 1, 'b' => null]]
-            ],
-            [
-                'foo.b.s.c',
-                ['foo' => ['a' => 1, 'b' => [['type' => 'f', 'c' => 2]]]]
-            ],
+            ['foo.b.0', ['foo' => ['a' => 1, 'b' => null]]],
+            ['foo.b.1', ['foo' => ['a' => 1, 'b' => [['type' => 'f', 'c' => 2]]]]],
+            ['foo.b.s', ['foo' => ['a' => 1, 'b' => [['type' => 'f', 'c' => 2], ['type' => 't']]]]],
+            ['foo.b.0.c', ['foo' => ['a' => 1, 'b' => null]]],
+            ['foo.b.s.c', ['foo' => ['a' => 1, 'b' => [['type' => 'f', 'c' => 2], ['type' => 't']]]]],
         ];
     }
 
@@ -90,15 +70,21 @@ class RemoveFromBagTest extends TestCase
         $this->assertEquals($expected, $this->dataBag->getState());
     }
 
-    /**
-     *
-     */
     public function testDoNotRemoveAllOnNumericIndex()
     {
         $this->dataBag->remove('foo.b.0', false);
         $this->assertEquals(
-            ['foo' => ['a' => 1, 'b' => [['type' => 's', 'c' => 3]]]],
+            ['foo' => ['a' => 1, 'b' => [['type' => 's', 'c' => 3], ['type' => 't']]]],
             $this->dataBag->getState()
         );
+    }
+
+    public function test_property_becomes_null_if_empty()
+    {
+        $dataBag = DataBag::fromEntityData('foo', [
+            'a' => [['type' => 'b'], ['type' => 'b']]
+        ]);
+        $dataBag->remove('foo.a.b');
+        $this->assertEquals(['a' => null], $dataBag->getState('foo'));
     }
 }
