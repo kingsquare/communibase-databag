@@ -180,11 +180,21 @@ final class DataBag
         $this->guardAgainstInvalidPath($path);
 
         unset($this->cache[$path]);
+
         if ($value === null) {
             $this->remove($path);
             return;
         }
 
+        $this->setByPath($path, $value);
+    }
+
+    /**
+     * @param string $path
+     * @param mixed $value
+     */
+    private function setByPath($path, $value)
+    {
         list($entityType, $path) = explode('.', $path, 2);
 
         // Direct property
