@@ -98,11 +98,6 @@ final class DataBag
      */
     private function getByPath($path, $default = null)
     {
-        // Invalid path
-        if (strpos($path, '.') === false) {
-            throw new InvalidDataBagPathException('Invalid get path: ' . $path);
-        }
-
         list($entityType, $path) = explode('.', $path, 2);
 
         // Direct property
@@ -119,7 +114,7 @@ final class DataBag
 
         // Indexed with 'type' property
         $field = null;
-        if (substr_count($index, '.') > 0) {
+        if (strpos($index, '.') > 0) {
             list($index, $field) = explode('.', $index, 2);
         }
 
@@ -162,6 +157,8 @@ final class DataBag
      */
     public function get($path, $default = null)
     {
+        $this->guardAgainstInvalidPath($path);
+
         if (!array_key_exists($path, $this->cache)) {
             $this->cache[$path] = $this->getByPath($path, $default);
         }
@@ -178,13 +175,9 @@ final class DataBag
      */
     public function set($path, $value)
     {
+        $this->guardAgainstInvalidPath($path);
+
         unset($this->cache[$path]);
-
-        // Invalid path, can't store
-        if (substr_count($path, '.') === 0) {
-            throw new InvalidDataBagPathException('Invalid set path: ' . $path);
-        }
-
         if ($value === null) {
             $this->remove($path);
             return;
@@ -193,7 +186,7 @@ final class DataBag
         list($entityType, $path) = explode('.', $path, 2);
 
         // Direct property
-        if (substr_count($path, '.') === 0) {
+        if (strpos($path, '.') === false) {
             $this->data[$entityType][$path] = $value;
             return;
         }
@@ -202,7 +195,7 @@ final class DataBag
         list($path, $index) = explode('.', $path, 2);
 
         $field = null;
-        if (substr_count($index, '.') > 0) {
+        if (strpos($index, '.') > 0) {
             list($index, $field) = explode('.', $index, 2);
         }
 
@@ -268,15 +261,12 @@ final class DataBag
      */
     public function remove($path, $removeAll = true)
     {
-        // Invalid path, can't remove
-        if (substr_count($path, '.') === 0) {
-            throw new InvalidDataBagPathException('Invalid remove path: ' . $path);
-        }
+        $this->guardAgainstInvalidPath($path);
 
         list($entityType, $path) = explode('.', $path, 2);
 
         // Direct property
-        if (substr_count($path, '.') === 0) {
+        if (strpos($path, '.') === false) {
             if (!isset($this->data[$entityType][$path])) {
                 return;
             }
@@ -365,4 +355,23 @@ final class DataBag
         }
         return isset($this->data[$entityType]) ? $this->data[$entityType] : [];
     }
+
+    /**
+     * @param string $path
+     */
+    private function guardAgainstInvalidPath($path)
+    {
+        if (!is_string($path)) {
+            throw new InvalidDataBagPathException('Invalid path provided: path must be a string ' . gettype($path).' given');
+        }
+
+        if ($path === '' // empty
+            || strpos($path, '..') !== false // has .. somewhere
+            || substr($path, -1) === '.' // ends with .
+            || in_array(strpos($path, '.'), [false, 0], true) // starts with or doesnt have any .
+        ) {
+            throw new InvalidDataBagPathException('Invalid path provided: ' . $path);
+        }
+    }
+
 }

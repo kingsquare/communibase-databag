@@ -1,0 +1,22 @@
+language: php
+
+sudo: false
+
+php:
+  - 7.1
+  - 7.2
+  - 7.3
+
+matrix:
+  fast_finish: true
+
+cache:
+    directories:
+        - $HOME/.composer/cache/files
+
+install:
+    - travis_retry composer install --no-interaction --prefer-dist
+
+script:
+    - vendor/bin/phpstan.phar analyse -l max --no-interaction --no-progress src/ tests/
+    - vendor/bin/phpunit

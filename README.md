@@ -1,5 +1,8 @@
 # Communibase DataBag
 
+[![Build Status](https://travis-ci.org/kingsquare/communibase-databag.svg?branch=master)](https://travis-ci.org/kingsquare/communibase-databag)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/kingsquare/communibase-databag/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/kingsquare/communibase-databag/?branch=master)
+
 It's a bag, for CB data. If we need to create a CB object from CB data (array) we can use this dataBag object as
 a private entity class property. The dataBag can contain one or more entities. For each entity we can get/set
 properties by path. If we need to persist the entity back into CB use getState to fetch the (updated) data array.

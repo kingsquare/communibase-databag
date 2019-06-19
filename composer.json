@@ -11,6 +11,10 @@
     {
       "name": "Misha van Tol",
       "email": "mishavantol@gmail.com"
+    },
+    {
+      "name": "Robin Speekenbrink",
+      "email": "robin@kingsquare.nl"
     }
   ],
   "require": {
@@ -23,10 +27,11 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Communibase\\Tests\\": "test/"
+      "Communibase\\Tests\\": "tests/"
     }
   },
   "require-dev": {
-    "phpunit/phpunit": "^5"
+    "phpunit/phpunit": "^5",
+    "phpstan/phpstan-shim": "^0.11.8"
   }
 }
