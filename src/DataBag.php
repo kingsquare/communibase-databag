@@ -241,7 +241,7 @@ final class DataBag
             $index = null;
             if (isset($this->data[$entityType][$path])) {
                 foreach ((array)$this->data[$entityType][$path] as $nodeIndex => $node) {
-                    if ($node['type'] === $target) {
+                    if (isset($node['type']) && $node['type'] === $target) {
                         $index = $nodeIndex;
                         break;
                     }

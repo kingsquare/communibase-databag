@@ -149,4 +149,17 @@ class SetInBagTest extends TestCase
         $this->filledDataBag->set($path, $value);
         $this->assertEquals($expected, $this->filledDataBag->getState());
     }
+
+    /**
+     * @test
+     */
+    public function it_can_handle_new_type_if_target_is_an_array_with_an_empty_array()
+    {
+        $dataBag = DataBag::fromEntityData('foo', ['addresses' => [[]]]);
+        $dataBag->set('foo.addresses.private.street', 'bar');
+        $this->assertEquals(
+            ['addresses' => [[], ['type' => 'private', 'street' => 'bar']]],
+            $dataBag->getState('foo')
+        );
+    }
 }
