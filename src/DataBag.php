@@ -134,7 +134,7 @@ final class DataBag
         if (!is_numeric($index)) {
             $translatedIndex = null;
             foreach ($nodes as $nodeIndex => $node) {
-                if ($node['type'] === $index) {
+                if (isset($node['type']) && $node['type'] === $index) {
                     $translatedIndex = $nodeIndex;
                     break;
                 }
