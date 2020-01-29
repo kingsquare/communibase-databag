@@ -1,4 +1,7 @@
-# Change Log    
+# Change Log
+
+## 1.1.4
+* ignore (generated) _id keys in isDirty check
 
 ## 1.1.3
 * fix notice if an indexed array is missing 'type'
@@ -15,5 +18,5 @@
 * added more tests
 * code styling
 
-## 1.0.0 
+## 1.0.0
 * initial release

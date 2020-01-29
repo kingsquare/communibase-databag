@@ -30,7 +30,7 @@ class IsDirtyTest extends TestCase
         $dataBag = DataBag::create();
         $dataBag->addEntityData('person', $personData);
         $dataBag->set('person.firstName', 'Darko');
-        $this->assertSame(true, $dataBag->isDirty('person'));
+        $this->assertTrue($dataBag->isDirty('person'));
     }
 
     public function testIsDirtyWhenFieldIsUnchanged()
@@ -51,7 +51,7 @@ class IsDirtyTest extends TestCase
         $dataBag = DataBag::create();
         $dataBag->addEntityData('person', $personData);
         $dataBag->set('person.firstName', 'John');
-        $this->assertSame(false, $dataBag->isDirty('person'));
+        $this->assertFalse($dataBag->isDirty('person'));
     }
 
     public function testIsDirtyWhenRemovedFromBag()
@@ -72,7 +72,7 @@ class IsDirtyTest extends TestCase
         $dataBag = DataBag::create();
         $dataBag->addEntityData('person', $personData);
         $dataBag->remove('person.firstName', true);
-        $this->assertSame(true, $dataBag->isDirty('person'));
+        $this->assertTrue($dataBag->isDirty('person'));
     }
 
     public function testIsDirtyWithUnknownPath()
@@ -94,6 +94,7 @@ class IsDirtyTest extends TestCase
         $dataBag->addEntityData('person', $personData);
         $this->assertNull($dataBag->isDirty('company'));
     }
+
     public function testIsDirtyWitNewPath()
     {
         $personData = [
@@ -112,6 +113,33 @@ class IsDirtyTest extends TestCase
         $dataBag = DataBag::create();
         $dataBag->addEntityData('person', $personData);
         $dataBag->set('company.title', 'Kingsquare BV');
-        $this->assertSame(true, $dataBag->isDirty('company'));
+        $this->assertTrue($dataBag->isDirty('company'));
+    }
+
+    public function test_generated_ids_are_ignored()
+    {
+        $dataBag = DataBag::create();
+        $dataBag->addEntityData(
+            'person',
+            [
+                'emailAddresses' => [
+                    [
+                        'emailAddress' => 'john@doe.com',
+                        'type' => 'private',
+                    ]
+                ],
+            ]
+        );
+
+        $dataBag->set(
+            'person.emailAddresses.0',
+            [
+                'emailAddress' => 'john@doe.com',
+                'type' => 'private',
+                '_id' => '8b912a04eac44fc453294c31f7ae98da',
+            ]
+        );
+
+        $this->assertFalse($dataBag->isDirty('person'));
     }
 }

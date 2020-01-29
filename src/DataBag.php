@@ -77,7 +77,7 @@ final class DataBag
     public function addEntityData($entityType, array $data)
     {
         $this->data[$entityType] = $data;
-        $this->hashes[$entityType] = md5(serialize($data));
+        $this->hashes[$entityType] = $this->generateHash($data);
         return $this;
     }
 
@@ -385,7 +385,35 @@ final class DataBag
         if (empty($this->hashes[$entityType])) {
             return true;
         }
-        return $this->hashes[$entityType] !== md5(serialize($this->getState($entityType)));
+        return $this->hashes[$entityType] !== $this->generateHash($this->getState($entityType));
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return string
+     */
+    private function generateHash($data)
+    {
+        return md5(\serialize($this->filter_ids($data)));
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return array
+     */
+    private function filter_ids(array $data)
+    {
+        \array_walk(
+            $data,
+            function (&$value) {
+                if (\is_array($value)) {
+                    $value = $this->filter_ids($value);
+                }
+            }
+        );
+        return \array_diff_key($data, ['_id' => null]);
     }
 
     /**
