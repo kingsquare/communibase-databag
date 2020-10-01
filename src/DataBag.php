@@ -17,8 +17,6 @@ final class DataBag
 {
     /**
      * The bag!
-     *
-     * @var array
      */
     private $data;
 
@@ -37,29 +35,18 @@ final class DataBag
     private $cache = [];
 
     /**
-     * DataBag constructor.
+     * Private constructor, use the named constructors below
      */
     private function __construct()
     {
     }
 
-    /**
-     * @return DataBag
-     */
-    public static function create()
+    public static function create(): DataBag
     {
         return new self();
     }
 
-    /**
-     * Static constructor
-     *
-     * @param string $entityType
-     * @param array $data
-     *
-     * @return DataBag
-     */
-    public static function fromEntityData($entityType, array $data)
+    public static function fromEntityData(string $entityType, array $data): DataBag
     {
         $dataBag = new self();
         $dataBag->addEntityData($entityType, $data);
@@ -68,13 +55,8 @@ final class DataBag
 
     /**
      * Add additional entities
-     *
-     * @param string $entityType
-     * @param array $data
-     *
-     * @return DataBag
      */
-    public function addEntityData($entityType, array $data)
+    public function addEntityData(string $entityType, array $data): DataBag
     {
         $this->data[$entityType] = $data;
         $this->hashes[$entityType] = $this->generateHash($data);
@@ -94,19 +76,18 @@ final class DataBag
      * @param mixed $default return value if there's no data
      *
      * @return mixed
-     * @throws InvalidDataBagPathException
      */
-    private function getByPath($path, $default = null)
+    private function getByPath(string $path, $default = null)
     {
-        list($entityType, $path) = explode('.', $path, 2);
+        [$entityType, $path] = explode('.', $path, 2);
 
         // Direct property
         if (strpos($path, '.') === false) {
-            return isset($this->data[$entityType][$path]) ? $this->data[$entityType][$path] : $default;
+            return $this->data[$entityType][$path] ?? $default;
         }
 
         // Indexed
-        list($path, $index) = explode('.', $path, 2);
+        [$path, $index] = explode('.', $path, 2);
 
         if (empty($this->data[$entityType][$path])) {
             return $default;
@@ -116,17 +97,15 @@ final class DataBag
     }
 
     /**
-     * @param array $nodes
-     * @param string $index
      * @param mixed $default
      *
      * @return mixed
      */
-    private function getIndexed(array $nodes, $index, $default)
+    private function getIndexed(array $nodes, string $index, $default)
     {
         $field = null;
         if (strpos($index, '.') > 0) {
-            list($index, $field) = explode('.', $index, 2);
+            [$index, $field] = explode('.', $index, 2);
         }
 
         $translatedIndex = $index;
@@ -146,10 +125,10 @@ final class DataBag
         }
 
         if ($field === null) {
-            return isset($nodes[$translatedIndex]) ? $nodes[$translatedIndex] : $default;
+            return $nodes[$translatedIndex] ?? $default;
         }
 
-        return isset($nodes[$translatedIndex][$field]) ? $nodes[$translatedIndex][$field] : $default;
+        return $nodes[$translatedIndex][$field] ?? $default;
     }
 
     /**
@@ -167,9 +146,8 @@ final class DataBag
      * @return mixed|null
      * @throws InvalidDataBagPathException
      */
-    public function get($path, $default = null)
+    public function get(string $path, $default = null)
     {
-        $path = (string)$path;
         $this->guardAgainstInvalidPath($path);
 
         if (!array_key_exists($path, $this->cache)) {
@@ -186,9 +164,8 @@ final class DataBag
      *
      * @throws InvalidDataBagPathException
      */
-    public function set($path, $value)
+    public function set(string $path, $value): void
     {
-        $path = (string)$path;
         $this->guardAgainstInvalidPath($path);
 
         unset($this->cache[$path]);
@@ -202,12 +179,11 @@ final class DataBag
     }
 
     /**
-     * @param string $path
      * @param mixed $value
      */
-    private function setByPath($path, $value)
+    private function setByPath(string $path, $value): void
     {
-        list($entityType, $path) = explode('.', $path, 2);
+        [$entityType, $path] = explode('.', $path, 2);
 
         // Direct property
         if (strpos($path, '.') === false) {
@@ -220,17 +196,15 @@ final class DataBag
     }
 
     /**
-     * @param string $entityType
-     * @param string $path
      * @param mixed $value
      */
-    private function setIndexed($entityType, $path, $value)
+    private function setIndexed(string $entityType, string $path, $value): void
     {
-        list($path, $index) = explode('.', $path, 2);
+        [$path, $index] = explode('.', $path, 2);
 
         $field = null;
         if (strpos($index, '.') > 0) {
-            list($index, $field) = explode('.', $index, 2);
+            [$index, $field] = explode('.', $index, 2);
         }
 
         $target = $index;
@@ -264,13 +238,9 @@ final class DataBag
     }
 
     /**
-     * @param string $entityType
-     * @param string $path
-     * @param string|null $field
-     * @param string $target
      * @param mixed $value
      */
-    private function addNewEntry($entityType, $path, $field, $target, $value)
+    private function addNewEntry(string $entityType, string $path, ?string $field, string $target, $value): void
     {
         if ($field === null) {
             $this->data[$entityType][$path][] = $value;
@@ -288,11 +258,9 @@ final class DataBag
     /**
      * Check if a certain entity type exists in the dataBag
      *
-     * @param string $entityType
-     *
      * @return bool true if the entity type exists
      */
-    public function hasEntityData($entityType)
+    public function hasEntityData(string $entityType): bool
     {
         return isset($this->data[$entityType]);
     }
@@ -305,12 +273,11 @@ final class DataBag
      *
      * @throws InvalidDataBagPathException
      */
-    public function remove($path, $removeAll = true)
+    public function remove(string $path, $removeAll = true): void
     {
-        $path = (string)$path;
         $this->guardAgainstInvalidPath($path);
 
-        list($entityType, $path) = explode('.', $path, 2);
+        [$entityType, $path] = explode('.', $path, 2);
 
         // Direct property
         if (strpos($path, '.') === false) {
@@ -324,14 +291,9 @@ final class DataBag
         $this->removeIndexed($path, $entityType, $removeAll);
     }
 
-    /**
-     * @param string $path
-     * @param string $entityType
-     * @param bool $removeAll
-     */
-    private function removeIndexed($path, $entityType, $removeAll)
+    private function removeIndexed(string $path, string $entityType, bool $removeAll): void
     {
-        list($path, $index) = explode('.', $path);
+        [$path, $index] = explode('.', $path);
 
         // Target doesn't exist, nothing to remove
         if (empty($this->data[$entityType][$path])) {
@@ -377,7 +339,7 @@ final class DataBag
      *
      * @return bool|null true if changed, false if not and null if the entity type is not set
      */
-    public function isDirty($entityType)
+    public function isDirty(string $entityType): ?bool
     {
         if (!isset($this->data[$entityType])) {
             return null;
@@ -388,22 +350,12 @@ final class DataBag
         return $this->hashes[$entityType] !== $this->generateHash($this->getState($entityType));
     }
 
-    /**
-     * @param array $data
-     *
-     * @return string
-     */
-    private function generateHash($data)
+    private function generateHash(array $data): string
     {
         return md5(\serialize($this->filter_ids($data)));
     }
 
-    /**
-     * @param array $data
-     *
-     * @return array
-     */
-    private function filter_ids(array $data)
+    private function filter_ids(array $data): array
     {
         \array_walk(
             $data,
@@ -420,21 +372,19 @@ final class DataBag
      * Get the raw data array
      *
      * @param string|null $entityType only get the specified type (optional)
-     *
-     * @return array
      */
-    public function getState($entityType = null)
+    public function getState(string $entityType = null): array
     {
         if ($entityType === null) {
             return $this->data;
         }
-        return isset($this->data[$entityType]) ? $this->data[$entityType] : [];
+        return $this->data[$entityType] ?? [];
     }
 
     /**
-     * @param string $path
+     * @throws InvalidDataBagPathException
      */
-    private function guardAgainstInvalidPath($path)
+    private function guardAgainstInvalidPath(string $path): void
     {
         if ($path === '' // empty
             || strpos($path, '..') !== false // has .. somewhere
@@ -444,5 +394,4 @@ final class DataBag
             throw new InvalidDataBagPathException('Invalid path provided: ' . $path);
         }
     }
-
 }
