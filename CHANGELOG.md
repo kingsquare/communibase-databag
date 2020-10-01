@@ -1,8 +1,5 @@
 # Change Log
 
-## 2.0.0
-* **[BC break]** change exception inheritance
-
 ## 1.1.4
 * ignore (generated) _id keys in isDirty check
 

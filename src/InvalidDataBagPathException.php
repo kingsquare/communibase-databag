@@ -7,6 +7,7 @@ namespace Communibase;
  * @author Kingsquare (source@kingsquare.nl)
  * @copyright Copyright (c) Kingsquare BV (http://www.kingsquare.nl)
  */
-class InvalidDataBagPathException extends \Exception
+class InvalidDataBagPathException extends \UnexpectedValueException
 {
+
 }
