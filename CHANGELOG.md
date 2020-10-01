@@ -1,5 +1,8 @@
 # Change Log
 
+## 2.0.1
+* **[BC break]** updated to PHP 7 (7.2)
+
 ## 1.1.4
 * ignore (generated) _id keys in isDirty check
 
