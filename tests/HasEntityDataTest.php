@@ -28,8 +28,7 @@ class HasEntityDataTest extends TestCase
                 ]
             ],
         ];
-        $dataBag = DataBag::create();
-        $dataBag->addEntityData('person', $personData);
+        $dataBag = DataBag::fromEntityData('person', $personData);
 
         self::assertTrue($dataBag->hasEntityData('person'));
         self::assertFalse($dataBag->hasEntityData('company'));

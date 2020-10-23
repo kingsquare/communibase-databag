@@ -29,8 +29,7 @@ class IsDirtyTest extends TestCase
                 ]
             ],
         ];
-        $dataBag = DataBag::create();
-        $dataBag->addEntityData('person', $personData);
+        $dataBag = DataBag::fromEntityData('person', $personData);
         $dataBag->set('person.firstName', 'Darko');
         self::assertTrue((bool)$dataBag->isDirty('person'));
     }
@@ -50,8 +49,7 @@ class IsDirtyTest extends TestCase
                 ]
             ],
         ];
-        $dataBag = DataBag::create();
-        $dataBag->addEntityData('person', $personData);
+        $dataBag = DataBag::fromEntityData('person', $personData);
         $dataBag->set('person.firstName', 'John');
         self::assertFalse((bool)$dataBag->isDirty('person'));
     }
@@ -71,8 +69,7 @@ class IsDirtyTest extends TestCase
                 ]
             ],
         ];
-        $dataBag = DataBag::create();
-        $dataBag->addEntityData('person', $personData);
+        $dataBag = DataBag::fromEntityData('person', $personData);
         $dataBag->remove('person.firstName', true);
         self::assertTrue((bool)$dataBag->isDirty('person'));
     }
@@ -92,8 +89,7 @@ class IsDirtyTest extends TestCase
                 ]
             ],
         ];
-        $dataBag = DataBag::create();
-        $dataBag->addEntityData('person', $personData);
+        $dataBag = DataBag::fromEntityData('person', $personData);
         self::assertNull($dataBag->isDirty('company'));
     }
 
@@ -112,16 +108,14 @@ class IsDirtyTest extends TestCase
                 ]
             ],
         ];
-        $dataBag = DataBag::create();
-        $dataBag->addEntityData('person', $personData);
+        $dataBag = DataBag::fromEntityData('person', $personData);
         $dataBag->set('company.title', 'Kingsquare BV');
         self::assertTrue((bool)$dataBag->isDirty('company'));
     }
 
     public function test_generated_ids_are_ignored(): void
     {
-        $dataBag = DataBag::create();
-        $dataBag->addEntityData(
+        $dataBag = DataBag::fromEntityData(
             'person',
             [
                 'emailAddresses' => [

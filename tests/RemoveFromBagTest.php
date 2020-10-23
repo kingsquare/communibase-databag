@@ -19,8 +19,7 @@ class RemoveFromBagTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->dataBag = DataBag::create();
-        $this->dataBag->addEntityData('foo', self::$data);
+        $this->dataBag = DataBag::fromEntityData('foo', self::$data);
     }
 
     protected function tearDown(): void
