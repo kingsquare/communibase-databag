@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Communibase;
 
 /**
@@ -150,7 +152,7 @@ final class DataBag
     {
         $this->guardAgainstInvalidPath($path);
 
-        if (!array_key_exists($path, $this->cache)) {
+        if (!\array_key_exists($path, $this->cache)) {
             $this->cache[$path] = $this->getByPath($path, $default);
         }
         return $this->cache[$path];
@@ -209,7 +211,7 @@ final class DataBag
 
         $target = $index;
         if (!is_numeric($index)) {
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $value['type'] = $index;
             }
             $index = null;
@@ -308,7 +310,7 @@ final class DataBag
                     $this->data[$entityType][$path] = null;
                     return;
                 }
-                $this->data[$entityType][$path] = array_slice($this->data[$entityType][$path], 0, $index);
+                $this->data[$entityType][$path] = \array_slice($this->data[$entityType][$path], 0, $index);
                 return;
             }
             unset($this->data[$entityType][$path][$index]);
@@ -352,12 +354,12 @@ final class DataBag
 
     private function generateHash(array $data): string
     {
-        return md5(\serialize($this->filter_ids($data)));
+        return md5(serialize($this->filter_ids($data)));
     }
 
     private function filter_ids(array $data): array
     {
-        \array_walk(
+        array_walk(
             $data,
             function (&$value) {
                 if (\is_array($value)) {
@@ -365,7 +367,7 @@ final class DataBag
                 }
             }
         );
-        return \array_diff_key($data, ['_id' => null]);
+        return array_diff_key($data, ['_id' => null]);
     }
 
     /**
@@ -389,7 +391,7 @@ final class DataBag
         if ($path === '' // empty
             || strpos($path, '..') !== false // has .. somewhere
             || substr($path, -1) === '.' // ends with .
-            || in_array(strpos($path, '.'), [false, 0], true) // starts with or doesnt have any .
+            || \in_array(strpos($path, '.'), [false, 0], true) // starts with or doesnt have any .
         ) {
             throw new InvalidDataBagPathException('Invalid path provided: ' . $path);
         }
