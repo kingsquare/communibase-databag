@@ -1,47 +1,43 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Communibase\Tests;
 
 use Communibase\DataBag;
+use Communibase\InvalidDataBagPathException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class RemoveFromBag
- * @author Kingsquare (source@kingsquare.nl)
- * @copyright Copyright (c) Kingsquare BV (http://www.kingsquare.nl)
+ * Class RemoveFromBagTest
+ * @package Communibase\Tests
  */
 class RemoveFromBagTest extends TestCase
 {
-    /**
-     * @var DataBag
-     */
     private $dataBag;
-
     private static $data = ['a' => 1, 'b' => [['type' => 'f', 'c' => 2], ['type' => 's', 'c' => 3], ['type' => 't']]];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dataBag = DataBag::create();
         $this->dataBag->addEntityData('foo', self::$data);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->dataBag);
     }
 
-    /**
-     * @expectedException \Communibase\InvalidDataBagPathException
-     */
-    public function testInvalidPath()
+    public function testInvalidPath(): void
     {
+        $this->expectException(InvalidDataBagPathException::class);
         $this->dataBag->remove('invalidPath');
     }
 
     /**
      * @return array
      */
-    public function provider()
+    public function provider(): array
     {
         return [
             ['baz.bar', ['foo' => self::$data]],
@@ -60,31 +56,31 @@ class RemoveFromBagTest extends TestCase
 
     /**
      * @dataProvider provider
-     *
-     * @param string $path
-     * @param array $expected
      */
-    public function testDataBagRemove($path, $expected)
+    public function testDataBagRemove(string $path, array $expected): void
     {
         $this->dataBag->remove($path);
-        $this->assertEquals($expected, $this->dataBag->getState());
+        self::assertEquals($expected, $this->dataBag->getState());
     }
 
-    public function testDoNotRemoveAllOnNumericIndex()
+    public function testDoNotRemoveAllOnNumericIndex(): void
     {
         $this->dataBag->remove('foo.b.0', false);
-        $this->assertEquals(
+        self::assertEquals(
             ['foo' => ['a' => 1, 'b' => [['type' => 's', 'c' => 3], ['type' => 't']]]],
             $this->dataBag->getState()
         );
     }
 
-    public function test_property_becomes_null_if_empty()
+    public function test_property_becomes_null_if_empty(): void
     {
-        $dataBag = DataBag::fromEntityData('foo', [
-            'a' => [['type' => 'b'], ['type' => 'b']]
-        ]);
+        $dataBag = DataBag::fromEntityData(
+            'foo',
+            [
+                'a' => [['type' => 'b'], ['type' => 'b']]
+            ]
+        );
         $dataBag->remove('foo.a.b');
-        $this->assertEquals(['a' => null], $dataBag->getState('foo'));
+        self::assertEquals(['a' => null], $dataBag->getState('foo'));
     }
 }

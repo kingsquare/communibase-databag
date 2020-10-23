@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Communibase\Tests;
 
 use Communibase\DataBag;
@@ -12,7 +14,7 @@ use PHPUnit\Framework\TestCase;
  */
 class IsDirtyTest extends TestCase
 {
-    public function testIsDirtyWhenFieldIsChanged()
+    public function testIsDirtyWhenFieldIsChanged(): void
     {
         $personData = [
             'firstName' => 'John',
@@ -30,10 +32,10 @@ class IsDirtyTest extends TestCase
         $dataBag = DataBag::create();
         $dataBag->addEntityData('person', $personData);
         $dataBag->set('person.firstName', 'Darko');
-        $this->assertTrue((bool)$dataBag->isDirty('person'));
+        self::assertTrue((bool)$dataBag->isDirty('person'));
     }
 
-    public function testIsDirtyWhenFieldIsUnchanged()
+    public function testIsDirtyWhenFieldIsUnchanged(): void
     {
         $personData = [
             'firstName' => 'John',
@@ -51,10 +53,10 @@ class IsDirtyTest extends TestCase
         $dataBag = DataBag::create();
         $dataBag->addEntityData('person', $personData);
         $dataBag->set('person.firstName', 'John');
-        $this->assertFalse((bool)$dataBag->isDirty('person'));
+        self::assertFalse((bool)$dataBag->isDirty('person'));
     }
 
-    public function testIsDirtyWhenRemovedFromBag()
+    public function testIsDirtyWhenRemovedFromBag(): void
     {
         $personData = [
             'firstName' => 'John',
@@ -72,10 +74,10 @@ class IsDirtyTest extends TestCase
         $dataBag = DataBag::create();
         $dataBag->addEntityData('person', $personData);
         $dataBag->remove('person.firstName', true);
-        $this->assertTrue((bool)$dataBag->isDirty('person'));
+        self::assertTrue((bool)$dataBag->isDirty('person'));
     }
 
-    public function testIsDirtyWithUnknownPath()
+    public function testIsDirtyWithUnknownPath(): void
     {
         $personData = [
             'firstName' => 'John',
@@ -92,10 +94,10 @@ class IsDirtyTest extends TestCase
         ];
         $dataBag = DataBag::create();
         $dataBag->addEntityData('person', $personData);
-        $this->assertNull($dataBag->isDirty('company'));
+        self::assertNull($dataBag->isDirty('company'));
     }
 
-    public function testIsDirtyWitNewPath()
+    public function testIsDirtyWitNewPath(): void
     {
         $personData = [
             'firstName' => 'John',
@@ -113,10 +115,10 @@ class IsDirtyTest extends TestCase
         $dataBag = DataBag::create();
         $dataBag->addEntityData('person', $personData);
         $dataBag->set('company.title', 'Kingsquare BV');
-        $this->assertTrue((bool)$dataBag->isDirty('company'));
+        self::assertTrue((bool)$dataBag->isDirty('company'));
     }
 
-    public function test_generated_ids_are_ignored()
+    public function test_generated_ids_are_ignored(): void
     {
         $dataBag = DataBag::create();
         $dataBag->addEntityData(
@@ -140,6 +142,6 @@ class IsDirtyTest extends TestCase
             ]
         );
 
-        $this->assertFalse((bool)$dataBag->isDirty('person'));
+        self::assertFalse((bool)$dataBag->isDirty('person'));
     }
 }

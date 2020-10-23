@@ -1,18 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Communibase\Tests;
 
 use Communibase\DataBag;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class RemoveFromBag
- * @author Kingsquare (source@kingsquare.nl)
- * @copyright Copyright (c) Kingsquare BV (http://www.kingsquare.nl)
+ * Class HasEntityDataTest
+ * @package Communibase\Tests
  */
 class HasEntityDataTest extends TestCase
 {
-    public function testHasEntityData()
+    public function testHasEntityData(): void
     {
         $personData = [
             'firstName' => 'John',
@@ -30,7 +31,7 @@ class HasEntityDataTest extends TestCase
         $dataBag = DataBag::create();
         $dataBag->addEntityData('person', $personData);
 
-        $this->assertTrue($dataBag->hasEntityData('person'));
-        $this->assertFalse($dataBag->hasEntityData('company'));
+        self::assertTrue($dataBag->hasEntityData('person'));
+        self::assertFalse($dataBag->hasEntityData('company'));
     }
 }

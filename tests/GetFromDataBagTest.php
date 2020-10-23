@@ -1,23 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Communibase\Tests;
 
 use Communibase\DataBag;
+use Communibase\InvalidDataBagPathException;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Class GetFromDataBagTest
- * @author Kingsquare (source@kingsquare.nl)
- * @copyright Copyright (c) Kingsquare BV (http://www.kingsquare.nl)
+ * @package Communibase\Tests
  */
 final class GetFromDataBagTest extends TestCase
 {
-    /**
-     * @var DataBag
-     */
     private $dataBag;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $personData = [
             'firstName' => 'John',
@@ -36,15 +35,12 @@ final class GetFromDataBagTest extends TestCase
         $this->dataBag->addEntityData('person', $personData);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->dataBag);
     }
 
-    /**
-     * @return array
-     */
-    public function invalidPathProvider()
+    public function invalidPathProvider(): array
     {
         return [
             'empty' => [''],
@@ -59,17 +55,14 @@ final class GetFromDataBagTest extends TestCase
 
     /**
      * @dataProvider invalidPathProvider
-     * @expectedException \Communibase\InvalidDataBagPathException
      */
-    public function testInvalidPath($path)
+    public function testInvalidPath(string $path): void
     {
+        $this->expectException(InvalidDataBagPathException::class);
         $this->dataBag->get($path);
     }
 
-    /**
-     * @return array
-     */
-    public function provider()
+    public function provider(): array
     {
         return [
             ['not.existing', 'default'],
@@ -84,12 +77,10 @@ final class GetFromDataBagTest extends TestCase
 
     /**
      * @dataProvider provider
-     *
-     * @param string $path
-     * @param string $expected
+     * @param array|string $expected
      */
-    public function testDataBagGet($path, $expected)
+    public function testDataBagGet(string $path, $expected): void
     {
-        $this->assertEquals($expected, $this->dataBag->get($path, 'default'));
+        self::assertEquals($expected, $this->dataBag->get($path, 'default'));
     }
 }
