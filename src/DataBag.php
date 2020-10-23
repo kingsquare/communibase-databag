@@ -19,20 +19,21 @@ final class DataBag
 {
     /**
      * The bag!
+     * @var array<string, array>
      */
     private $data;
 
     /**
      * Original data hash for isDirty check
      *
-     * @var string[]
+     * @var array<string,string>
      */
     private $hashes;
 
     /**
      * If we have multiple identical get calls in the same request use the cached result
      *
-     * @var array
+     * @var array<string, mixed>
      */
     private $cache = [];
 
@@ -48,6 +49,9 @@ final class DataBag
         return new self();
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     public static function fromEntityData(string $entityType, array $data): DataBag
     {
         $dataBag = new self();
@@ -57,6 +61,7 @@ final class DataBag
 
     /**
      * Add additional entities
+     * @param array<string, mixed> $data
      */
     public function addEntityData(string $entityType, array $data): DataBag
     {
@@ -99,6 +104,7 @@ final class DataBag
     }
 
     /**
+     * @param array<string,array> $nodes
      * @param mixed $default
      *
      * @return mixed
@@ -352,18 +358,25 @@ final class DataBag
         return $this->hashes[$entityType] !== $this->generateHash($this->getState($entityType));
     }
 
+    /**
+     * @param array<string,mixed> $data
+     */
     private function generateHash(array $data): string
     {
-        return md5(serialize($this->filter_ids($data)));
+        return md5(serialize($this->filterIds($data)));
     }
 
-    private function filter_ids(array $data): array
+    /**
+     * @param array<string,mixed> $data
+     * @return array<string,mixed>
+     */
+    private function filterIds(array $data): array
     {
         array_walk(
             $data,
             function (&$value) {
                 if (\is_array($value)) {
-                    $value = $this->filter_ids($value);
+                    $value = $this->filterIds($value);
                 }
             }
         );
@@ -374,6 +387,7 @@ final class DataBag
      * Get the raw data array
      *
      * @param string|null $entityType only get the specified type (optional)
+     * @return array<string,mixed>
      */
     public function getState(string $entityType = null): array
     {
