@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Communibase\Tests;
 
 use Communibase\DataBag;
@@ -14,18 +16,9 @@ class FactoryTest extends TestCase
     /**
      * @test
      */
-    public function it_can_be_created()
-    {
-        $databag = DataBag::create();
-        $this->assertInstanceOf(DataBag::class, $databag);
-    }
-
-    /**
-     * @test
-     */
-    public function it_can_be_statically_constructed()
+    public function it_can_be_statically_constructed(): void
     {
         $databag = DataBag::fromEntityData('Foo', ['bar' => 'baz']);
-        $this->assertSame('baz', $databag->get('Foo.bar'));
+        self::assertSame('baz', $databag->get('Foo.bar'));
     }
 }
