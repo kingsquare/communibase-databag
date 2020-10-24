@@ -62,6 +62,15 @@ final class GetFromDataBagTest extends TestCase
         self::assertEquals($expected, $this->dataBag->get($path, 'default'));
     }
 
+    /**
+     * @test
+     */
+    public function it_can_get_sub_paths(): void
+    {
+        $databag = DataBag::fromEntityData('file', ['metadata' => ['path' => 'Foo']]);
+        self::assertSame('Foo', $databag->get('file.metadata.path'));
+    }
+
     protected function setUp(): void
     {
         $personData = [

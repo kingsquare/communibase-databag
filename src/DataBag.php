@@ -88,13 +88,18 @@ final class DataBag
             return $this->data[$entityType][$path] ?? $default;
         }
 
-        // Indexed
         [$path, $index] = explode('.', $path, 2);
 
         if (empty($this->data[$entityType][$path])) {
             return $default;
         }
 
+        // Sub path
+        if (\array_key_exists($index, $this->data[$entityType][$path])) {
+            return $this->data[$entityType][$path][$index] ?? $default;
+        }
+
+        // Indexed
         return $this->getIndexed((array)$this->data[$entityType][$path], $index, $default);
     }
 
@@ -193,16 +198,22 @@ final class DataBag
             return;
         }
 
-        // Indexed
-        $this->setIndexed($entityType, $path, $value);
+        // Sub path or indexed
+        $this->setSubPathOrIndexed($entityType, $path, $value);
     }
 
     /**
      * @param mixed $value
      */
-    private function setIndexed(string $entityType, string $path, $value): void
+    private function setSubPathOrIndexed(string $entityType, string $path, $value): void
     {
         [$path, $index] = explode('.', $path, 2);
+
+        // Sub path
+        if (!\is_array($value) && !\is_numeric($index) && \strpos($index, '.') === false) {
+            $this->data[$entityType][$path][$index] = $value;
+            return;
+        }
 
         $field = null;
         if (strpos($index, '.') > 0) {
