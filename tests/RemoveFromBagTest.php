@@ -14,29 +14,18 @@ use PHPUnit\Framework\TestCase;
  */
 class RemoveFromBagTest extends TestCase
 {
-    private $dataBag;
     private static $data = ['a' => 1, 'b' => [['type' => 'f', 'c' => 2], ['type' => 's', 'c' => 3], ['type' => 't']]];
+    private $dataBag;
 
-    protected function setUp(): void
-    {
-        $this->dataBag = DataBag::create();
-        $this->dataBag->addEntityData('foo', self::$data);
-    }
-
-    protected function tearDown(): void
-    {
-        unset($this->dataBag);
-    }
-
-    public function testInvalidPath(): void
+    /**
+     * @test
+     */
+    public function it_will_throw_exception_if_using_invalid_path(): void
     {
         $this->expectException(InvalidDataBagPathException::class);
         $this->dataBag->remove('invalidPath');
     }
 
-    /**
-     * @return array
-     */
     public function provider(): array
     {
         return [
@@ -55,15 +44,19 @@ class RemoveFromBagTest extends TestCase
     }
 
     /**
+     * @test
      * @dataProvider provider
      */
-    public function testDataBagRemove(string $path, array $expected): void
+    public function it_will_remove_items(string $path, array $expected): void
     {
         $this->dataBag->remove($path);
         self::assertEquals($expected, $this->dataBag->getState());
     }
 
-    public function testDoNotRemoveAllOnNumericIndex(): void
+    /**
+     * @test
+     */
+    public function it_will_not_remove_all_items_if_numerically_indexed(): void
     {
         $this->dataBag->remove('foo.b.0', false);
         self::assertEquals(
@@ -72,7 +65,10 @@ class RemoveFromBagTest extends TestCase
         );
     }
 
-    public function test_property_becomes_null_if_empty(): void
+    /**
+     * @test
+     */
+    public function property_becomes_null_if_empty(): void
     {
         $dataBag = DataBag::fromEntityData(
             'foo',
@@ -82,5 +78,16 @@ class RemoveFromBagTest extends TestCase
         );
         $dataBag->remove('foo.a.b');
         self::assertEquals(['a' => null], $dataBag->getState('foo'));
+    }
+
+    protected function setUp(): void
+    {
+        $this->dataBag = DataBag::create();
+        $this->dataBag->addEntityData('foo', self::$data);
+    }
+
+    protected function tearDown(): void
+    {
+        unset($this->dataBag);
     }
 }

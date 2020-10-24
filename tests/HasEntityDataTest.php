@@ -13,7 +13,25 @@ use PHPUnit\Framework\TestCase;
  */
 class HasEntityDataTest extends TestCase
 {
-    public function testHasEntityData(): void
+    private $dataBag;
+
+    /**
+     * @test
+     */
+    public function it_has_data_for_known_path(): void
+    {
+        self::assertTrue($this->dataBag->hasEntityData('person'));
+    }
+
+    /**
+     * @test
+     */
+    public function it_does_not_have_data_for_known_path(): void
+    {
+        self::assertFalse($this->dataBag->hasEntityData('company'));
+    }
+
+    protected function setUp(): void
     {
         $personData = [
             'firstName' => 'John',
@@ -28,10 +46,12 @@ class HasEntityDataTest extends TestCase
                 ]
             ],
         ];
-        $dataBag = DataBag::create();
-        $dataBag->addEntityData('person', $personData);
+        $this->dataBag = DataBag::create();
+        $this->dataBag->addEntityData('person', $personData);
+    }
 
-        self::assertTrue($dataBag->hasEntityData('person'));
-        self::assertFalse($dataBag->hasEntityData('company'));
+    protected function tearDown(): void
+    {
+        unset($this->dataBag);
     }
 }

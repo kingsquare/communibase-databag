@@ -10,36 +10,26 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Class SetInBagTest
- * @author Kingsquare (source@kingsquare.nl)
- * @copyright Copyright (c) Kingsquare BV (http://www.kingsquare.nl)
+ * @package Communibase\Tests
  */
 class SetInBagTest extends TestCase
 {
     private $emptyDataBag;
     private $filledDataBag;
 
-    protected function setUp(): void
-    {
-        $this->emptyDataBag = DataBag::create();
-        $this->filledDataBag = DataBag::create();
-        $this->filledDataBag->addEntityData(
-            'foo',
-            ['a' => 1, 'b' => [['type' => 'f', 'c' => 2], ['type' => 's', 'c' => 3]]]
-        );
-    }
-
-    protected function tearDown(): void
-    {
-        unset($this->emptyDataBag, $this->filledDataBag);
-    }
-
-    public function testRemoveBySettingNull(): void
+    /**
+     * @test
+     */
+    public function it_will_remove_a_value_by_issuing_null(): void
     {
         $this->filledDataBag->set('foo.a', null);
         self::assertNull($this->filledDataBag->getState('foo')['a']);
     }
 
-    public function testInvalidPath(): void
+    /**
+     * @test
+     */
+    public function it_throws_exception_if_invalid_path_is_used_when_setting_data(): void
     {
         $this->expectException(InvalidDataBagPathException::class);
         $this->emptyDataBag->set('invalidPath', 1);
@@ -58,10 +48,11 @@ class SetInBagTest extends TestCase
     }
 
     /**
+     * @test
      * @dataProvider emptyDataBagProvider
      * @param int|array $value
      */
-    public function testEmptyDataBagSet(string $path, $value, array $expected): void
+    public function it_will_fill_empty_databag_with_various_contents(string $path, $value, array $expected): void
     {
         $this->emptyDataBag->set($path, $value);
         self::assertEquals($expected, $this->emptyDataBag->getState());
@@ -114,10 +105,11 @@ class SetInBagTest extends TestCase
     }
 
     /**
+     * @test
      * @dataProvider filledDataBagProvider
      * @param array|string $value
      */
-    public function testFilledDataBagSet(string $path, $value, array $expected): void
+    public function it_will_fill_non_empty_databag_with_various_contents(string $path, $value, array $expected): void
     {
         $this->filledDataBag->set($path, $value);
         self::assertEquals($expected, $this->filledDataBag->getState());
@@ -134,5 +126,20 @@ class SetInBagTest extends TestCase
             ['addresses' => [[], ['type' => 'private', 'street' => 'bar']]],
             $dataBag->getState('foo')
         );
+    }
+
+    protected function setUp(): void
+    {
+        $this->emptyDataBag = DataBag::create();
+        $this->filledDataBag = DataBag::create();
+        $this->filledDataBag->addEntityData(
+            'foo',
+            ['a' => 1, 'b' => [['type' => 'f', 'c' => 2], ['type' => 's', 'c' => 3]]]
+        );
+    }
+
+    protected function tearDown(): void
+    {
+        unset($this->emptyDataBag, $this->filledDataBag);
     }
 }
