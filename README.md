@@ -12,8 +12,6 @@ properties by path. If we need to persist the entity back into CB use getState t
 namespace Communibase;
 
 /**
- * Class ExamplePerson
- * @package Communibase\DataBag
  * @author Kingsquare (source@kingsquare.nl)
  * @copyright Copyright (c) Kingsquare BV (http://www.kingsquare.nl)
  */
@@ -25,42 +23,35 @@ class ExamplePerson
     private $databag;
 
     /**
-     * ExamplePerson constructor.
+     * @param array<string,mixed> $personData
      */
-    private function __construct()
+    private function __construct(array $personData)
     {
-        $this->databag = DataBag::create();
+        $this->databag = DataBag::fromEntityData('person', $personData);
     }
 
     /**
-     * @param array $data
+     * @param array<string,mixed> $personData
      */
-    public static function fromPersonData(array $data)
+    public static function fromPersonData(array $personData): ExamplePerson
     {
-        $person = new self();
-        $person->databag->addEntityData('person', $data);
+        return new self($personData);
     }
 
-    /**
-     * @return string
-     */
-    public function getFirstName()
+    public function getFirstName(): string
     {
         return (string)$this->databag->get('person.firstName');
     }
 
-    /**
-     * @param string $firstName
-     */
-    public function setFirstName($firstName)
+    public function setFirstName(string $firstName): void
     {
         $this->databag->set('person.firstName', $firstName);
     }
 
     /**
-     * @return array
+     * @return array<string,mixed>
      */
-    public function getState()
+    public function getState(): array
     {
         return $this->databag->getState('person');
     }
