@@ -8,10 +8,6 @@ use Communibase\DataBag;
 use Communibase\InvalidDataBagPathException;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class GetFromDataBagTest
- * @package Communibase\Tests
- */
 final class GetFromDataBagTest extends TestCase
 {
     /**

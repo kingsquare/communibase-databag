@@ -7,10 +7,6 @@ namespace Communibase\Tests;
 use Communibase\DataBag;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class FactoryTest
- * @package Communibase\Tests
- */
 class FactoryTest extends TestCase
 {
     /**

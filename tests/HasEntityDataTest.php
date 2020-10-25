@@ -7,10 +7,6 @@ namespace Communibase\Tests;
 use Communibase\DataBag;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class HasEntityDataTest
- * @package Communibase\Tests
- */
 class HasEntityDataTest extends TestCase
 {
     /**

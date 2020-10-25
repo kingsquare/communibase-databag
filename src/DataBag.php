@@ -5,13 +5,10 @@ declare(strict_types=1);
 namespace Communibase;
 
 /**
- * Class DataBag
- *
  * It's a bag, for CB data. If we need to create a CB object from CB data (array) we can use this dataBag object as a
  * private entity class property. The dataBag can contain one or more entities. For each entity we can get/set
  * properties by path. If we need to persist the entity back into CB use getState to fetch the (updated) data array.
  *
- * @package Communibase\DataBag
  * @author Kingsquare (source@kingsquare.nl)
  * @copyright Copyright (c) Kingsquare BV (http://www.kingsquare.nl)
  */
