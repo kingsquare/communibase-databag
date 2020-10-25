@@ -8,13 +8,15 @@ use Communibase\DataBag;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class RemoveFromBag
- * @author Kingsquare (source@kingsquare.nl)
- * @copyright Copyright (c) Kingsquare BV (http://www.kingsquare.nl)
+ * Class IsDirtyTest
+ * @package Communibase\Tests
  */
 class IsDirtyTest extends TestCase
 {
-    public function testIsDirtyWhenFieldIsChanged(): void
+    /**
+     * @test
+     */
+    public function it_will_be_dirty_if_path_is_changed(): void
     {
         $personData = [
             'firstName' => 'John',
@@ -34,7 +36,10 @@ class IsDirtyTest extends TestCase
         self::assertTrue((bool)$dataBag->isDirty('person'));
     }
 
-    public function testIsDirtyWhenFieldIsUnchanged(): void
+    /**
+     * @test
+     */
+    public function it_will_not_be_dirty_if_path_is_unchanged(): void
     {
         $personData = [
             'firstName' => 'John',
@@ -54,7 +59,10 @@ class IsDirtyTest extends TestCase
         self::assertFalse((bool)$dataBag->isDirty('person'));
     }
 
-    public function testIsDirtyWhenRemovedFromBag(): void
+    /**
+     * @test
+     */
+    public function it_will_be_dirty_if_path_property_is_removed(): void
     {
         $personData = [
             'firstName' => 'John',
@@ -74,7 +82,10 @@ class IsDirtyTest extends TestCase
         self::assertTrue((bool)$dataBag->isDirty('person'));
     }
 
-    public function testIsDirtyWithUnknownPath(): void
+    /**
+     * @test
+     */
+    public function it_will_be_dirty_when_checking_unknown_path(): void
     {
         $personData = [
             'firstName' => 'John',
@@ -93,7 +104,10 @@ class IsDirtyTest extends TestCase
         self::assertNull($dataBag->isDirty('company'));
     }
 
-    public function testIsDirtyWitNewPath(): void
+    /**
+     * @test
+     */
+    public function it_will_be_dirty_when_adding_new_path(): void
     {
         $personData = [
             'firstName' => 'John',
@@ -113,7 +127,10 @@ class IsDirtyTest extends TestCase
         self::assertTrue((bool)$dataBag->isDirty('company'));
     }
 
-    public function test_generated_ids_are_ignored(): void
+    /**
+     * @test
+     */
+    public function generated_ids_are_ignored(): void
     {
         $dataBag = DataBag::fromEntityData(
             'person',

@@ -8,8 +8,8 @@ use Communibase\DataBag;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @author Kingsquare (source@kingsquare.nl)
- * @copyright Copyright (c) Kingsquare BV (http://www.kingsquare.nl)
+ * Class FactoryTest
+ * @package Communibase\Tests
  */
 class FactoryTest extends TestCase
 {
