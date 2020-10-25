@@ -33,11 +33,6 @@ final class DataRemover
             return;
         }
 
-        $this->removeIndexed($path, $entityType);
-    }
-
-    private function removeIndexed(string $path, string $entityType): void
-    {
         [$path, $index] = explode('.', $path);
 
         // Target doesn't exist, nothing to remove
@@ -45,14 +40,24 @@ final class DataRemover
             return;
         }
 
+        // Sub-path
+        if (isset($this->data[$entityType][$path][$index]) && !is_numeric($index) && strpos($index, '.') === false) {
+            $this->data[$entityType][$path][$index] = null;
+            return;
+        }
+
+        $this->removeIndexed($entityType, $path, $index);
+    }
+
+    private function removeIndexed(string $entityType, string $path, string $index): void
+    {
         if (is_numeric($index)) {
-            $index = (int)$index;
             // Remove all (higher) values to prevent a new value after re-indexing
-            if ($index === 0) {
+            if ((int)$index === 0) {
                 $this->data[$entityType][$path] = null;
                 return;
             }
-            $this->data[$entityType][$path] = \array_slice($this->data[$entityType][$path], 0, $index);
+            $this->data[$entityType][$path] = \array_slice($this->data[$entityType][$path], 0, (int)$index);
             return;
         }
 

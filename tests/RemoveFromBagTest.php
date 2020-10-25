@@ -77,4 +77,19 @@ class RemoveFromBagTest extends TestCase
         $dataBag->set('foo.a.b', null);
         self::assertEquals(['a' => null], $dataBag->getState('foo'));
     }
+
+    public function test_it_can_remove_a_sub_path(): void
+    {
+        $dataBag = DataBag::fromEntityData(
+            'foo',
+            [
+                'a' => 1,
+                'b' => ['c' => 2],
+                'd' => ['e' => [1, 2]]
+            ]
+        );
+        $dataBag->set('foo.b.c', null);
+        $dataBag->set('foo.d.e', null);
+        self::assertSame(['a' => 1, 'b' => ['c' => null], 'd' => ['e' => null]], $dataBag->getState('foo'));
+    }
 }
