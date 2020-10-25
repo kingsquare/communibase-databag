@@ -130,7 +130,7 @@ final class DataBag
 
         if ($value === null) {
             $this->guardAgainstInvalidPath($path);
-            $this->dataRemover->remove($this->data, $path);
+            $this->dataRemover->removeByPath($this->data, $path);
             return;
         }
 

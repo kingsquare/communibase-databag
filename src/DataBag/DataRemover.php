@@ -18,7 +18,7 @@ final class DataRemover
      *
      * @throws InvalidDataBagPathException
      */
-    public function remove(array &$data, string $path): void
+    public function removeByPath(array &$data, string $path): void
     {
         $this->data = &$data;
 
