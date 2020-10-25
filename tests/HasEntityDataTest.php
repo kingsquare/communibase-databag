@@ -46,8 +46,7 @@ class HasEntityDataTest extends TestCase
                 ]
             ],
         ];
-        $this->dataBag = DataBag::create();
-        $this->dataBag->addEntityData('person', $personData);
+        $this->dataBag = DataBag::fromEntityData('person', $personData);
     }
 
     protected function tearDown(): void

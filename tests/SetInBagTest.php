@@ -131,8 +131,7 @@ class SetInBagTest extends TestCase
     protected function setUp(): void
     {
         $this->emptyDataBag = DataBag::create();
-        $this->filledDataBag = DataBag::create();
-        $this->filledDataBag->addEntityData(
+        $this->filledDataBag = DataBag::fromEntityData(
             'foo',
             ['a' => 1, 'b' => [['type' => 'f', 'c' => 2], ['type' => 's', 'c' => 3]]]
         );
