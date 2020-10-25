@@ -14,8 +14,15 @@ use PHPUnit\Framework\TestCase;
  */
 class RemoveFromBagTest extends TestCase
 {
-    private static $data = ['a' => 1, 'b' => [['type' => 'f', 'c' => 2], ['type' => 's', 'c' => 3], ['type' => 't']]];
+    /**
+     * @var DataBag
+     */
     private $dataBag;
+
+    /**
+     * @var array<string,mixed>
+     */
+    private static $data = ['a' => 1, 'b' => [['type' => 'f', 'c' => 2], ['type' => 's', 'c' => 3], ['type' => 't']]];
 
     /**
      * @test
@@ -26,6 +33,9 @@ class RemoveFromBagTest extends TestCase
         $this->dataBag->remove('invalidPath');
     }
 
+    /**
+     * @return array<array>
+     */
     public function provider(): array
     {
         return [
@@ -46,6 +56,7 @@ class RemoveFromBagTest extends TestCase
     /**
      * @test
      * @dataProvider provider
+     * @param array<array> $expected
      */
     public function it_will_remove_items(string $path, array $expected): void
     {

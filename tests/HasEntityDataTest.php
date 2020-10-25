@@ -13,6 +13,9 @@ use PHPUnit\Framework\TestCase;
  */
 class HasEntityDataTest extends TestCase
 {
+    /**
+     * @var DataBag
+     */
     private $dataBag;
 
     /**

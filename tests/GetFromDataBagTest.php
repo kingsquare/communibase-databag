@@ -14,8 +14,14 @@ use PHPUnit\Framework\TestCase;
  */
 final class GetFromDataBagTest extends TestCase
 {
+    /**
+     * @var DataBag
+     */
     private $dataBag;
 
+    /**
+     * @return array<string,array>
+     */
     public function invalidPathProvider(): array
     {
         return [
@@ -39,6 +45,9 @@ final class GetFromDataBagTest extends TestCase
         $this->dataBag->get($path);
     }
 
+    /**
+     * @return array<array>
+     */
     public function getProvider(): array
     {
         return [
@@ -55,7 +64,7 @@ final class GetFromDataBagTest extends TestCase
     /**
      * @test
      * @dataProvider getProvider
-     * @param array|string $expected
+     * @param array<string,string>|string $expected
      */
     public function it_can_get_data_using_a_path(string $path, $expected): void
     {

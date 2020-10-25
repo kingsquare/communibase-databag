@@ -14,7 +14,14 @@ use PHPUnit\Framework\TestCase;
  */
 class SetInBagTest extends TestCase
 {
+    /**
+     * @var DataBag
+     */
     private $emptyDataBag;
+
+    /**
+     * @var DataBag
+     */
     private $filledDataBag;
 
     /**
@@ -35,6 +42,9 @@ class SetInBagTest extends TestCase
         $this->emptyDataBag->set('invalidPath', 1);
     }
 
+    /**
+     * @return array<array>
+     */
     public function emptyDataBagProvider(): array
     {
         return [
@@ -50,7 +60,8 @@ class SetInBagTest extends TestCase
     /**
      * @test
      * @dataProvider emptyDataBagProvider
-     * @param int|array $value
+     * @param int|array<string,integer> $value
+     * @param array<string,array> $expected
      */
     public function it_will_fill_empty_databag_with_various_contents(string $path, $value, array $expected): void
     {
@@ -58,6 +69,9 @@ class SetInBagTest extends TestCase
         self::assertEquals($expected, $this->emptyDataBag->getState());
     }
 
+    /**
+     * @return array<array>
+     */
     public function filledDataBagProvider(): array
     {
         return [
@@ -107,7 +121,8 @@ class SetInBagTest extends TestCase
     /**
      * @test
      * @dataProvider filledDataBagProvider
-     * @param array|string $value
+     * @param integer|array<string,int> $value
+     * @param array<string,array> $expected
      */
     public function it_will_fill_non_empty_databag_with_various_contents(string $path, $value, array $expected): void
     {
