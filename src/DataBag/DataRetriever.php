@@ -21,13 +21,18 @@ final class DataRetriever
             return $data[$entityType][$path] ?? $default;
         }
 
-        // Indexed
         [$property, $index] = explode('.', $path, 2);
 
         if (empty($data[$entityType][$property])) {
             return $default;
         }
 
+        // Sub-path
+        if (\is_string($index) && \array_key_exists($index, $data[$entityType][$property])) {
+            return $data[$entityType][$property][$index] ?? $default;
+        }
+
+        // Indexed
         return $this->getIndexedValue((array)$data[$entityType][$property], $index, $default);
     }
 

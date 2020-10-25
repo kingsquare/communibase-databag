@@ -29,6 +29,7 @@ final class GetFromDataBagTest extends TestCase
                     'type' => 'privateGsm',
                 ]
             ],
+            'metadata' => ['path' => 'Foo']
         ];
         $this->dataBag = DataBag::fromEntityData('person', $personData);
     }
@@ -70,12 +71,14 @@ final class GetFromDataBagTest extends TestCase
     {
         return [
             ['not.existing', 'default'],
+            ['not.existing.subPath', 'default'],
             ['person.firstName', 'John'],
             ['person.emailAddresses.0', ['emailAddress' => 'john@doe.com', 'type' => 'private']],
             ['person.emailAddresses.0.emailAddress', 'john@doe.com'],
             ['person.emailAddresses.privateGsm.emailAddress', 'john@doe2.com'],
             ['person.addresses.test', 'default'],
             ['person.emailAddresses.test', 'default'],
+            ['person.metadata.path', 'Foo'],
         ];
     }
 

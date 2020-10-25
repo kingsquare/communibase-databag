@@ -26,32 +26,37 @@ final class DataMutator
             return;
         }
 
-        // Indexed
-        $this->setIndexed($entityType, $path, $value);
+        [$path, $index] = explode('.', $path, 2);
+
+        // Sub-path
+        if (!\is_array($value) && !\is_numeric($index) && \strpos($index, '.') === false) {
+            $this->data[$entityType][$path][$index] = $value;
+            return;
+        }
+
+        $this->setIndexed($entityType, $path, $index, $value);
     }
 
     /**
      * @param mixed $value
      */
-    private function setIndexed(string $entityType, string $path, $value): void
+    private function setIndexed(string $entityType, string $path, string $index, $value): void
     {
-        [$path, $index] = explode('.', $path, 2);
-
         $field = null;
         if (strpos($index, '.') > 0) {
             [$index, $field] = explode('.', $index, 2);
         }
 
-        $target = $index;
-        if (!is_numeric($index)) {
+        $targetIndex = $index;
+        if (!is_numeric($targetIndex)) {
             if (\is_array($value)) {
-                $value['type'] = $index;
+                $value['type'] = $targetIndex;
             }
-            $index = null;
+            $targetIndex = null;
             if (isset($this->data[$entityType][$path])) {
                 foreach ((array)$this->data[$entityType][$path] as $nodeIndex => $node) {
-                    if (isset($node['type']) && $node['type'] === $target) {
-                        $index = $nodeIndex;
+                    if (isset($node['type']) && $node['type'] === $index) {
+                        $targetIndex = $nodeIndex;
                         break;
                     }
                 }
@@ -59,17 +64,17 @@ final class DataMutator
         }
 
         // No index found, new entry
-        if ($index === null) {
-            $this->addNewEntry($entityType, $path, $field, $target, $value);
+        if ($targetIndex === null) {
+            $this->addNewEntry($entityType, $path, $field, $index, $value);
             return;
         }
 
         // Use found index
         if ($field === null) {
-            $this->data[$entityType][$path][$index] = $value;
+            $this->data[$entityType][$path][$targetIndex] = $value;
             return;
         }
-        $this->data[$entityType][$path][$index][$field] = $value;
+        $this->data[$entityType][$path][$targetIndex][$field] = $value;
     }
 
     /**

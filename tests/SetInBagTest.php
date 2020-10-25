@@ -54,7 +54,7 @@ class SetInBagTest extends TestCase
         return [
             ['foo.bar', 1, ['foo' => ['bar' => 1]]],
             ['foo.bar.0', 1, ['foo' => ['bar' => [1]]]],
-            ['foo.bar.test', 1, ['foo' => ['bar' => [1]]]],
+            ['foo.bar.test', 1, ['foo' => ['bar' => ['test' => 1]]]],
             ['foo.bar.test', ['baz' => 3], ['foo' => ['bar' => [['baz' => 3, 'type' => 'test']]]]],
             ['foo.bar.0.baz', 1, ['foo' => ['bar' => [['baz' => 1]]]]],
             ['foo.bar.test.baz', 1, ['foo' => ['bar' => [['baz' => 1, 'type' => 'test']]]]],
@@ -101,7 +101,7 @@ class SetInBagTest extends TestCase
             [
                 'foo.b.s',
                 2,
-                ['foo' => ['a' => 1, 'b' => [['type' => 'f', 'c' => 2], 2]]]
+                ['foo' => ['a' => 1, 'b' => [['type' => 'f', 'c' => 2], ['type' => 's', 'c' => 3], 's' => 2]]]
             ],
             [
                 'foo.b.s',
