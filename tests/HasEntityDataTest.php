@@ -14,22 +14,6 @@ class HasEntityDataTest extends TestCase
      */
     private $dataBag;
 
-    /**
-     * @test
-     */
-    public function it_has_data_for_known_path(): void
-    {
-        self::assertTrue($this->dataBag->hasEntityData('person'));
-    }
-
-    /**
-     * @test
-     */
-    public function it_does_not_have_data_for_known_path(): void
-    {
-        self::assertFalse($this->dataBag->hasEntityData('company'));
-    }
-
     protected function setUp(): void
     {
         $personData = [
@@ -51,5 +35,15 @@ class HasEntityDataTest extends TestCase
     protected function tearDown(): void
     {
         unset($this->dataBag);
+    }
+
+    public function test_it_has_data_for_known_path(): void
+    {
+        self::assertTrue($this->dataBag->hasEntityData('person'));
+    }
+
+    public function test_it_does_not_have_data_for_known_path(): void
+    {
+        self::assertFalse($this->dataBag->hasEntityData('company'));
     }
 }

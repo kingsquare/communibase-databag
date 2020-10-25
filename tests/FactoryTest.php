@@ -9,29 +9,20 @@ use PHPUnit\Framework\TestCase;
 
 class FactoryTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function it_can_be_statically_constructed(): void
+    public function test_it_can_be_statically_constructed(): void
     {
         $databag = DataBag::fromEntityData('Foo', ['bar' => 'baz']);
         self::assertSame('baz', $databag->get('Foo.bar'));
     }
 
-    /**
-     * @test
-     */
-    public function it_can_be_statically_created_and_filled(): void
+    public function test_it_can_be_statically_created_and_filled(): void
     {
         $databag = DataBag::create();
         $databag->addEntityData('Foo', ['bar' => 'baz']);
         self::assertSame('baz', $databag->get('Foo.bar'));
     }
 
-    /**
-     * @test
-     */
-    public function it_can_be_statically_created_and_filled_with_multiple_entities(): void
+    public function test_it_can_be_statically_created_and_filled_with_multiple_entities(): void
     {
         $databag = DataBag::create();
         $databag->addEntityData('Foo', ['bar' => 'baz']);

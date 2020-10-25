@@ -20,19 +20,27 @@ class SetInBagTest extends TestCase
      */
     private $filledDataBag;
 
-    /**
-     * @test
-     */
-    public function it_will_remove_a_value_by_issuing_null(): void
+    protected function setUp(): void
+    {
+        $this->emptyDataBag = DataBag::create();
+        $this->filledDataBag = DataBag::fromEntityData(
+            'foo',
+            ['a' => 1, 'b' => [['type' => 'f', 'c' => 2], ['type' => 's', 'c' => 3]]]
+        );
+    }
+
+    protected function tearDown(): void
+    {
+        unset($this->emptyDataBag, $this->filledDataBag);
+    }
+
+    public function test_it_will_remove_a_value_by_issuing_null(): void
     {
         $this->filledDataBag->set('foo.a', null);
         self::assertNull($this->filledDataBag->getState('foo')['a']);
     }
 
-    /**
-     * @test
-     */
-    public function it_throws_exception_if_invalid_path_is_used_when_setting_data(): void
+    public function test_it_throws_exception_if_invalid_path_is_used_when_setting_data(): void
     {
         $this->expectException(InvalidDataBagPathException::class);
         $this->emptyDataBag->set('invalidPath', 1);
@@ -41,7 +49,7 @@ class SetInBagTest extends TestCase
     /**
      * @return array<array>
      */
-    public function emptyDataBagProvider(): array
+    public function setDataPaths(): array
     {
         return [
             ['foo.bar', 1, ['foo' => ['bar' => 1]]],
@@ -54,12 +62,11 @@ class SetInBagTest extends TestCase
     }
 
     /**
-     * @test
-     * @dataProvider emptyDataBagProvider
+     * @dataProvider setDataPaths
      * @param int|array<string,integer> $value
      * @param array<string,array> $expected
      */
-    public function it_will_fill_empty_databag_with_various_contents(string $path, $value, array $expected): void
+    public function test_it_will_fill_empty_databag_with_various_contents(string $path, $value, array $expected): void
     {
         $this->emptyDataBag->set($path, $value);
         self::assertEquals($expected, $this->emptyDataBag->getState());
@@ -68,7 +75,7 @@ class SetInBagTest extends TestCase
     /**
      * @return array<array>
      */
-    public function filledDataBagProvider(): array
+    public function addDataPaths(): array
     {
         return [
             [
@@ -115,21 +122,17 @@ class SetInBagTest extends TestCase
     }
 
     /**
-     * @test
-     * @dataProvider filledDataBagProvider
+     * @dataProvider addDataPaths
      * @param integer|array<string,int> $value
      * @param array<string,array> $expected
      */
-    public function it_will_fill_non_empty_databag_with_various_contents(string $path, $value, array $expected): void
+    public function test_it_will_add_data_to_non_empty_databag(string $path, $value, array $expected): void
     {
         $this->filledDataBag->set($path, $value);
         self::assertEquals($expected, $this->filledDataBag->getState());
     }
 
-    /**
-     * @test
-     */
-    public function it_can_handle_new_type_if_target_is_an_array_with_an_empty_array(): void
+    public function test_it_can_handle_new_type_if_target_is_an_array_with_an_empty_array(): void
     {
         $dataBag = DataBag::fromEntityData('foo', ['addresses' => [[]]]);
         $dataBag->set('foo.addresses.private.street', 'bar');
@@ -137,19 +140,5 @@ class SetInBagTest extends TestCase
             ['addresses' => [[], ['type' => 'private', 'street' => 'bar']]],
             $dataBag->getState('foo')
         );
-    }
-
-    protected function setUp(): void
-    {
-        $this->emptyDataBag = DataBag::create();
-        $this->filledDataBag = DataBag::fromEntityData(
-            'foo',
-            ['a' => 1, 'b' => [['type' => 'f', 'c' => 2], ['type' => 's', 'c' => 3]]]
-        );
-    }
-
-    protected function tearDown(): void
-    {
-        unset($this->emptyDataBag, $this->filledDataBag);
     }
 }
