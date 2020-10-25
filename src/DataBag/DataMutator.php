@@ -29,7 +29,7 @@ final class DataMutator
         [$path, $index] = explode('.', $path, 2);
 
         // Sub-path
-        if (!\is_array($value) && !\is_numeric($index) && \strpos($index, '.') === false) {
+        if (!is_numeric($index) && strpos($index, '.') === false && !$this->isAssocativeArray($value)) {
             $this->data[$entityType][$path][$index] = $value;
             return;
         }
@@ -93,5 +93,13 @@ final class DataMutator
             $value['type'] = $target;
         }
         $this->data[$entityType][$path][] = $value;
+    }
+
+    /**
+     * @param mixed $value
+     */
+    private function isAssocativeArray($value): bool
+    {
+        return \is_array($value) && (array_keys($value) !== range(0, \count($value) - 1));
     }
 }

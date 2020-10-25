@@ -58,6 +58,7 @@ class SetInBagTest extends TestCase
             ['foo.bar.test', ['baz' => 3], ['foo' => ['bar' => [['baz' => 3, 'type' => 'test']]]]],
             ['foo.bar.0.baz', 1, ['foo' => ['bar' => [['baz' => 1]]]]],
             ['foo.bar.test.baz', 1, ['foo' => ['bar' => [['baz' => 1, 'type' => 'test']]]]],
+            ['foo.bar.test', [1, 2], ['foo' => ['bar' => ['test' => [1, 2]]]]],
         ];
     }
 
