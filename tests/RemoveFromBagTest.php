@@ -33,7 +33,7 @@ class RemoveFromBagTest extends TestCase
     public function test_it_will_throw_exception_if_using_invalid_path(): void
     {
         $this->expectException(InvalidDataBagPathException::class);
-        $this->dataBag->remove('invalidPath');
+        $this->dataBag->set('invalidPath', null);
     }
 
     /**
@@ -62,17 +62,8 @@ class RemoveFromBagTest extends TestCase
      */
     public function test_it_will_remove_items(string $path, array $expected): void
     {
-        $this->dataBag->remove($path);
+        $this->dataBag->set($path, null);
         self::assertEquals($expected, $this->dataBag->getState());
-    }
-
-    public function test_it_will_not_remove_all_items_if_numerically_indexed(): void
-    {
-        $this->dataBag->remove('foo.b.0', false);
-        self::assertEquals(
-            ['foo' => ['a' => 1, 'b' => [['type' => 's', 'c' => 3], ['type' => 't']]]],
-            $this->dataBag->getState()
-        );
     }
 
     public function test_property_becomes_null_if_empty(): void
@@ -83,7 +74,7 @@ class RemoveFromBagTest extends TestCase
                 'a' => [['type' => 'b'], ['type' => 'b']]
             ]
         );
-        $dataBag->remove('foo.a.b');
+        $dataBag->set('foo.a.b', null);
         self::assertEquals(['a' => null], $dataBag->getState('foo'));
     }
 }

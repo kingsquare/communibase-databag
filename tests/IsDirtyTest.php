@@ -65,7 +65,7 @@ class IsDirtyTest extends TestCase
             ],
         ];
         $dataBag = DataBag::fromEntityData('person', $personData);
-        $dataBag->remove('person.firstName', true);
+        $dataBag->set('person.firstName', null);
         self::assertTrue((bool)$dataBag->isDirty('person'));
     }
 
