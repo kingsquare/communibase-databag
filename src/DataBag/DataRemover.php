@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Communibase\DataBag;
 
-use Communibase\InvalidDataBagPathException;
-
 final class DataRemover
 {
     /**
@@ -15,8 +13,6 @@ final class DataRemover
 
     /**
      * @param array<string,mixed> $data
-     *
-     * @throws InvalidDataBagPathException
      */
     public function removeByPath(array &$data, string $path): void
     {
