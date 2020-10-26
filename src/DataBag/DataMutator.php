@@ -12,6 +12,7 @@ final class DataMutator
     private $data;
 
     /**
+     * @param array<string,mixed> $data
      * @param mixed $value
      */
     public function setByPath(array &$data, string $path, $value): void
